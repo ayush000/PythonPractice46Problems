@@ -3,6 +3,7 @@ import functools
 import random
 import itertools
 import collections
+from collections import defaultdict
 
 
 # 3. str_len()s
@@ -421,23 +422,97 @@ def split_sentences(filename):
 
 # 43. find_anagrams()
 def find_anagrams(filename):
-    dict_anag={}
-    has_anag={}
-    result=[]
+    dict_anag = {}
+    has_anag = {}
+    result = []
     with open(filename) as a_file:
         for word in a_file:
-            word=word.rstrip()
-            index=''.join(sorted(word))
+            word = word.rstrip()
+            index = ''.join(sorted(word))
             # print(index)
             if index in dict_anag.keys():
                 if has_anag[index]:
                     result.append(word)
                 else:
-                    has_anag[index]=True
+                    has_anag[index] = True
                     result.append(dict_anag[index])
                     result.append(word)
             else:
-                dict_anag[index]=word
-                has_anag[index]=False
+                dict_anag[index] = word
+                has_anag[index] = False
     return result
 
+
+# 44. validate_brackets()
+def validate_brackets(str):
+    counter = 0
+    if len(str) % 2 != 0:
+        return False
+    for char in str:
+        if char == '[':
+            counter += 1
+        elif char == ']':
+            counter -= 1
+        if counter < 0:
+            return False
+    if counter == 0:
+        return True
+    else:
+        return False
+
+
+# 44.b generate_brackets()
+def generate_brackets(N):
+    bracks = ['[', ']']
+    result = ''
+    for i in range(N):
+        result += bracks[random.randint(0, 1)]
+    return result
+    # print(result)
+
+
+# 44. Generate matching brackets
+def abc():
+    bracks = ']'
+    while not validate_brackets(bracks):
+        bracks = generate_brackets(6)
+    print(bracks)
+
+
+# 45. words_domino() too slow
+# Fixed speed issues by using defaultdict. My version gives better output(with more words), that's why test fails
+def words_domino(filename):
+    chain_longest = []
+    dict_domino=defaultdict(list)
+    with open(filename) as a_file:
+        words = re.findall(r'\w+', a_file.read())
+    for word in words:
+        dict_domino[word[0]].append(word)
+    # print(dict_domino)
+    for word in words:
+        chain = Chain(word, dict_domino)
+        if len(chain) > len(chain_longest):
+            chain_longest = chain
+    print(chain_longest)
+    print(len(chain_longest)==len(set(chain_longest)))
+    return chain_longest
+
+
+def Chain(starting_word, iterable_dict):
+    # print(starting_word)
+    # print(starting_word[-1])
+    # print(iterable_dict)
+    iterable_dict[starting_word[0]].remove(starting_word)
+    chain = [starting_word]
+    max_subchain = []
+    it=iterable_dict[starting_word[-1]]
+    if it:
+        for w in it:
+            # iterable_dict[starting_word[-1]].remove(w)
+            subchain = Chain(w, iterable_dict)
+            # iterable_dict[starting_word[-1]].append(w)
+            if len(subchain) > len(max_subchain):
+                max_subchain = subchain
+        chain.extend(max_subchain)
+    iterable_dict[starting_word[0]].append(starting_word)
+    return chain
