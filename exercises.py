@@ -4,6 +4,7 @@ import random
 import itertools
 import collections
 
+
 # 3. str_len()s
 def str_len(s):
     i = 0
@@ -344,69 +345,99 @@ def copy_file_count_lines(filename):
     with open('output_37.md', mode='w') as output_file:
         with open(filename) as input_file:
             for line in input_file:
-                out=str(line_num)+' '+line
+                out = str(line_num) + ' ' + line
                 output_file.write(out)
-                line_num+=1
+                line_num += 1
 
-#38. average_word_length()
+
+# 38. average_word_length()
 def average_word_length(filename):
     with open(filename) as a_file:
-        words = re.findall(r'\w+',a_file.read())
-        total=0
-        num=0
+        words = re.findall(r'\w+', a_file.read())
+        total = 0
+        num = 0
         for word in words:
-            total+=len(word)
-            num+=1
-    avg=total/num
+            total += len(word)
+            num += 1
+    avg = total / num
     return int(avg)
-#39.guess_the_number_game()
+
+
+# 39.guess_the_number_game()
 def guess_the_number_game():
-    guess=0
-    num_guesses=0
-    user_name=input('Hello! What is your name?')
+    guess = 0
+    num_guesses = 0
+    user_name = input('Hello! What is your name?')
     print('Well, {}, I am thinking of a number between 1 and 20.'.format(user_name))
-    num=random.randrange(1,21)
-    while guess!=num:
-        guess=int(input('Take a guess.'))
-        if guess<num:
+    num = random.randrange(1, 21)
+    while guess != num:
+        guess = int(input('Take a guess.'))
+        if guess < num:
             print('Your guess is too low.')
         else:
             print('Your guess is too high.')
-        num_guesses+=1
-    print('Good job, {}! You guessed my number in {} guesses!'.format(user_name,num_guesses))
+        num_guesses += 1
+    print('Good job, {}! You guessed my number in {} guesses!'.format(user_name, num_guesses))
 
-#40. anagram_game()
+
+# 40. anagram_game()
 def anagram_game(list):
-    word=random.sample(list,1)[0].lower()
-    puzzle=random.sample([''.join(p) for p in itertools.permutations(word,len(word))],1)[0]
-    guess=''
+    word = random.sample(list, 1)[0].lower()
+    puzzle = random.sample([''.join(p) for p in itertools.permutations(word, len(word))], 1)[0]
+    guess = ''
     print('Colour word anagram: {}'.format(puzzle))
-    while(word!=guess):
-        guess=input('Guess the colour word!').lower()
+    while (word != guess):
+        guess = input('Guess the colour word!').lower()
     print('correct!!')
 
-#41. lingo()
-def lingo(word,guess):
-    d=[]
-    result=''
-    length=len(word)
-    for i,char in enumerate(guess):
+
+# 41. lingo()
+def lingo(word, guess):
+    d = []
+    result = ''
+    length = len(word)
+    for i, char in enumerate(guess):
         if char in word:
-            if i<length:
-                if char==word[i]:
-                    result+='['+char+']'
+            if i < length:
+                if char == word[i]:
+                    result += '[' + char + ']'
                 else:
-                    result+='('+char+')'
+                    result += '(' + char + ')'
             else:
-                result+='('+char+')'
+                result += '(' + char + ')'
         else:
-            result+=char
+            result += char
     return result
 
-#42. split_sentences()
+
+# 42. split_sentences()
 def split_sentences(filename):
     with open(filename) as a_file:
-        input_str=a_file.read().rstrip()
-    input_str=re.sub(r'(?<!(Dr)|(Mr))\. (?![a-z])','.\n',input_str)
-    input_str=re.sub(r'([!?]) ',r'\1\n',input_str)
+        input_str = a_file.read().rstrip()
+    input_str = re.sub(r'(?<!(Dr)|(Mr))\. (?![a-z])', '.\n', input_str)
+    input_str = re.sub(r'([!?]) ', r'\1\n', input_str)
     return input_str
+
+
+# 43. find_anagrams()
+def find_anagrams(filename):
+    dict_anag={}
+    has_anag={}
+    result=[]
+    with open(filename) as a_file:
+        for word in a_file:
+            word=word.rstrip()
+            index=''.join(sorted(word))
+            # print(index)
+            if index in dict_anag.keys():
+                if has_anag[index]:
+                    result.append(word)
+                else:
+                    has_anag[index]=True
+                    result.append(dict_anag[index])
+                    result.append(word)
+            else:
+                dict_anag[index]=word
+                has_anag[index]=False
+    return result
+
