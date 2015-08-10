@@ -402,5 +402,11 @@ def lingo(word,guess):
         else:
             result+=char
     return result
-#42. split_sentences()
 
+#42. split_sentences()
+def split_sentences(filename):
+    with open(filename) as a_file:
+        input_str=a_file.read().rstrip()
+    input_str=re.sub(r'(?<!(Dr)|(Mr))\. (?![a-z])','.\n',input_str)
+    input_str=re.sub(r'([!?]) ',r'\1\n',input_str)
+    return input_str
