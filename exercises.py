@@ -483,7 +483,7 @@ def abc():
 # Fixed speed issues by using defaultdict. My version gives better output(with more words), that's why test fails
 def words_domino(filename):
     chain_longest = []
-    dict_domino=defaultdict(list)
+    dict_domino = defaultdict(list)
     with open(filename) as a_file:
         words = re.findall(r'\w+', a_file.read())
     for word in words:
@@ -494,10 +494,11 @@ def words_domino(filename):
         if len(chain) > len(chain_longest):
             chain_longest = chain
     print(chain_longest)
-    print(len(chain_longest)==len(set(chain_longest)))
+    print(len(chain_longest) == len(set(chain_longest)))
     return chain_longest
 
 
+# 45.1 Helper function
 def Chain(starting_word, iterable_dict):
     # print(starting_word)
     # print(starting_word[-1])
@@ -505,7 +506,7 @@ def Chain(starting_word, iterable_dict):
     iterable_dict[starting_word[0]].remove(starting_word)
     chain = [starting_word]
     max_subchain = []
-    it=iterable_dict[starting_word[-1]]
+    it = iterable_dict[starting_word[-1]]
     if it:
         for w in it:
             # iterable_dict[starting_word[-1]].remove(w)
@@ -516,3 +517,28 @@ def Chain(starting_word, iterable_dict):
         chain.extend(max_subchain)
     iterable_dict[starting_word[0]].append(starting_word)
     return chain
+
+
+# 46. alternade()
+def alternade(filename):
+    words = []
+    with open(filename) as a_file:
+        for word in a_file:
+            # print(word)
+            words.append(word.rstrip())
+        for w in words:
+            if(len(w)>3):
+                firstalt = ''
+                secondalt = ''
+                for i, char in enumerate(w):
+                    if i % 2 == 0:
+                        firstalt += char
+                    else:
+                        secondalt += char
+                # print(firstalt)
+                # print(secondalt)
+                # print(w)
+                # print("{} and {}".format(firstalt,secondalt))
+                if firstalt in words and secondalt in words:
+                    print('"{}": makes "{}" and "{}"'.format(w, firstalt, secondalt))
+
